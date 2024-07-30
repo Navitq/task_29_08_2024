@@ -35,7 +35,7 @@ const App: React.FC = () => {
     const [modalContent, setModalContent] = useState<React.ReactNode>(null);
     const [editMode, setEditMode] = useState<boolean>(false);
 
-    type ColorType = string; // Replace with the actual type if it's different
+    type ColorType = string;
     type CellColorsType = {
         [key: string]: ColorType;
     };
@@ -78,27 +78,21 @@ const App: React.FC = () => {
     };
 
     const handleDeleteRow = (rowIndex: number) => {
-        // Update data by filtering out the deleted row
         setData((prevData) => prevData.filter((_, index) => index !== rowIndex));
 
-        // Create a new object to hold updated cell colors
         const newSetColor: CellColorsType = {};
 
         Object.keys(cellColors).forEach((key) => {
             const [rowIdx, colIdx] = key.split('-').map(Number);
             if (rowIdx < rowIndex) {
-                // Rows before the deleted row are unaffected
                 newSetColor[key] = cellColors[key];
             } else if (rowIdx > rowIndex) {
-                // Shift the row index for rows after the deleted row
                 newSetColor[`${rowIdx - 1}-${colIdx}`] = cellColors[key];
             }
         });
 
-        // Set the updated cell colors
         setCellColors(newSetColor);
 
-        // Close the modal
         setShowModal(false);
     };
 
